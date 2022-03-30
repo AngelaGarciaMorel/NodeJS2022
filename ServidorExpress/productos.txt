@@ -1,0 +1,20 @@
+[
+  {
+    "title": "reloj",
+    "price": 10,
+    "thumbnile": "./reloj.png",
+    "id": 1
+  },
+  {
+    "title": "pava",
+    "price": 20,
+    "thumbnile": "./pava.jpg",
+    "id": 2
+  },
+  {
+    "title": "celular",
+    "price": 30,
+    "thumbnile": "./celular.jpg",
+    "id": 3
+  }
+]
