@@ -1,0 +1,28 @@
+<div class="container" style="background-color: #F5F5F5;">
+    <h2>Listas de Productos</h2>
+    {{#if tieneDatos}}
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Foto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each productos}}
+            <tr>
+            <td>{{this.title}}</td>
+            <td>${{this.price}}</td>
+            <td><img src="{{this.thumbnail}}" style="height: 50px; width:50px"></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+        <h3 class="bg-warning">No se encontraron productos</h3>
+    {{/if}}
+    <br>
+    <a href="/"><button class="btn btn-success">Cargar Productos</button></a>
+    
+</div>
