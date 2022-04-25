@@ -1,0 +1,20 @@
+[
+  {
+    "title": "telefono",
+    "price": "100",
+    "thumbnail": "https://cdn-icons-gif.flaticon.com/6172/6172514.gif",
+    "id": 1
+  },
+  {
+    "title": "calendario",
+    "price": "50",
+    "thumbnail": "https://cdn-icons-gif.flaticon.com/6416/6416392.gif",
+    "id": 2
+  },
+  {
+    "title": "auriculares",
+    "price": "20",
+    "thumbnail": "https://cdn-icons-gif.flaticon.com/6172/6172517.gif",
+    "id": 5
+  }
+]
