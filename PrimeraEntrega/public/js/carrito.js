@@ -97,8 +97,10 @@ function makeHtmlTable(productos) {
                 vertical-align: middle;
             }
         </style>`
+            console.log('entro a genrrar tabla');
+            console.log('productos: ' + JSON.stringify(productos));
 
-    if (productos.length > 0) {
+    if (productos.value.productos.length > 0) {
         html += `
         <h2>Lista de Productos</h2>
         <div class="table-responsive">
@@ -108,7 +110,7 @@ function makeHtmlTable(productos) {
                     <th>Precio</th>
                     <th>Foto</th>
                 </tr>`
-        for (const prod of productos) {
+        for (const prod of productos.value.productos) {
             html += `
                     <tr>
                     <td>${prod.title}</td>
