@@ -90,6 +90,7 @@ routerCart.use(express.urlencoded({ extended: true }));
 app.use('/api/carritos', routerCart);
 
 //Servicios Carrito
+//obtiene todos los carritos
 routerCart.get('/', (req, res) => {
     listaCarritos = cartApi.getAll();
     listaCarritos.then( value => {
@@ -113,6 +114,8 @@ routerCart.get('/:id', (req, res) => {
     });
 
 });
+
+//obtiene los productos del carrito
 routerCart.get('/:id/productos', (req, res) => {
     let unProd = cartApi.getById(req.params.id);
     unProd.then( value => {
@@ -125,12 +128,14 @@ routerCart.get('/:id/productos', (req, res) => {
 
 });
 
+//agrega un carrito
 routerCart.post('/', (req, res) => {
     let id = cartApi.save(req.body);
     res.json({ id });
     
 });
 
+//agrega un producto al carrito
 routerCart.post('/:id/productos', (req, res) => {   
     let unProd = productsApi.getById(req.body.id);
 
@@ -155,25 +160,21 @@ routerCart.post('/:id/productos', (req, res) => {
     });    
 });
 
-routerCart.put('/:id', (req, res) => {
-
-    let unProd = cartApi.updateById(req.params.id, req.body);
-
-    unProd.then( value => {    
-        if(value === null){
-            res.json({ error : 'producto no encontrado' });
-        } else {
-            res.json({value});
-        }
-    });
-
-});
-
+//elimina un carrito
 routerCart.delete('/:id', (req, res) => {
     const idProd = req.params.id;
-    let id = cartApi.deleteById(idProd);
+    let id = cartApi.deleteById(req.params.id);
     res.json({id: idProd});
 });
+
+//elimina un producto del carrito
+routerCart.delete('/:id/productos/:idP', (req, res) => {
+    const idProd = req.params.id;
+    let id = cartApi.deleteObjectById(req.params.id,req.params.idP);
+    res.json({id: idProd});
+});
+
+
 
 
 

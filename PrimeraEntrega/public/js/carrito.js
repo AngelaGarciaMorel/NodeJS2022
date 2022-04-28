@@ -53,6 +53,8 @@ document.getElementById('btnAgregarAlCarrito').addEventListener('click', () => {
 })
 
 document.getElementById('btnCrearCarrito').addEventListener('click', () => {
+    document.getElementById('carrito').innerHTML = "";
+    
     carritosApi.crearCarrito()
         .then(({ id }) => {
             loadComboCarrito().then(() => {

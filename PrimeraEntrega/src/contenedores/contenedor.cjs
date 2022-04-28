@@ -112,6 +112,33 @@ class Contenedor {
         }
     }
 
+    async deleteObjectById(idObjeto, idArrayHijo,arrayHijo){
+        try {
+            const fs = require('fs');
+            const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
+            if(contenido.length > 0){
+                let info = JSON.parse(contenido);
+                for (let index = 0; index < info.length; index++) {
+                    const element = info[index];
+                    if (element.id == idObjeto) {
+                        for (let index = 0; index < element.productos.length; index++) {
+                            const hijo = element.productos[index];
+                            if(hijo.id == idArrayHijo){
+                                
+                                element.productos.splice(index,1); 
+                            }
+                        } 
+                    }                  
+                }
+                await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(info,null,2));
+            }
+        } catch (error) {
+            console.log (error) ;
+
+            
+        }
+    }
+
     async deleteAll(){
         try {
             const fs = require('fs');
