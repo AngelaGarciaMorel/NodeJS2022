@@ -21,7 +21,7 @@ class Contenedor {
                 }
              }
             objeto.id = ++id;
-            objeto.timestamp = Date.now();
+            objeto.timestamp = new Date();
             info.push(objeto);
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(info,null,2));
             return objeto.id;
@@ -32,7 +32,9 @@ class Contenedor {
     }
     async updateById(id, objeto) {
         try {
+            console.log('objeto:' + JSON.stringify(objeto));
             objeto.id = id;
+            objeto.timestamp = new Date();
             const fs = require('fs');
             const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
             
@@ -62,8 +64,11 @@ class Contenedor {
                 
                 const objetoDelId = new Object;
                 info.forEach(element => {
+                    console.log('element.id:' + element.id);
+                    console.log('idObjeto:' + idObjeto);
                     if(element.id == idObjeto)
                         Object.assign(objetoDelId,element);
+                        console.log('objetoDelId:' + JSON.stringify(objetoDelId));
                 });
 
                 return objetoDelId;
@@ -78,10 +83,9 @@ class Contenedor {
         try {
             const fs = require('fs');
             const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
-            console.log('longitud: ' + contenido.length);
             if(contenido.length > 0){
                 const info = JSON.parse(contenido);
-                return info;
+                 return info;
             }
             return null;
         } catch (error) {

@@ -91,8 +91,8 @@ app.use('/api/carritos', routerCart);
 
 //Servicios Carrito
 routerCart.get('/', (req, res) => {
-    listaProductos = cartApi.getAll();
-    listaProductos.then( value => {
+    listaCarritos = cartApi.getAll();
+    listaCarritos.then( value => {
         if(value === null){
             res.json({ error : 'No hay productos disponibles' });
         } else {
@@ -113,11 +113,50 @@ routerCart.get('/:id', (req, res) => {
     });
 
 });
+routerCart.get('/:id/productos', (req, res) => {
+    let unProd = cartApi.getById(req.params.id);
+    unProd.then( value => {
+        if(value === null){
+            res.json({ error : 'producto no encontrado' });
+        } else {
+            res.json({value});
+        }
+    });
+
+});
 
 routerCart.post('/', (req, res) => {
     let id = cartApi.save(req.body);
     res.json({ id });
     
+});
+
+routerCart.post('/:id/productos', (req, res) => {
+    console.log('parametro:' + JSON.stringify(req.params.id));
+    
+    let unIdProd = req.body.id;
+    console.log('id:' + unIdProd);
+    let unProd = productsApi.getById(unIdProd);
+    unProd.then( value => {   
+        console.log('id Carrito:' + req.params.id); 
+        let unCarrito = cartApi.getById(req.params.id);
+        unCarrito.then( valueCarrito => { 
+            console.log('valueCarrito.productos:' + valueCarrito.productos);  
+            if (valueCarrito.productos === undefined) {
+                valueCarrito.productos = [];  
+            }           
+            valueCarrito.productos.push(value);
+            console.log('valueCarrito.productos segunda parte:' + JSON.stringify(valueCarrito)); 
+            valueCarrito = cartApi.updateById(req.params.id, unCarrito);
+            valueCarrito.then( value2Carrito => {
+                if(valvalue2Carritoue === null){
+                    res.json({ error : 'producto no encontrado' });
+                } else {
+                    res.json({value2Carrito});
+                }
+            });
+        });
+    });    
 });
 
 routerCart.put('/:id', (req, res) => {

@@ -12,7 +12,6 @@
     "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384274.png",
     "id": "2",
     "timestamp": 1651107542976    
-  }
   },
   {
     "title": "disfraz payaso",

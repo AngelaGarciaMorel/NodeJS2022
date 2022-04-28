@@ -55,7 +55,6 @@ document.getElementById('btnAgregarAlCarrito').addEventListener('click', () => {
 document.getElementById('btnCrearCarrito').addEventListener('click', () => {
     carritosApi.crearCarrito()
         .then(({ id }) => {
-            console.log(`id: ${id}`);
             loadComboCarrito().then(() => {
                 const combo = document.getElementById('comboCarritos')
                 combo.value = `${id}`
@@ -142,7 +141,7 @@ function loadComboProductos() {
         .then(productos => {
             const combo = document.getElementById('comboProductos');
             combo.appendChild(crearOpcionInicial('elija un producto'))
-            for (const prod of productos) {
+            for (const prod of productos.value) {
                 const comboItem = document.createElement("option");
                 comboItem.value = prod.id;
                 comboItem.text = prod.title;
@@ -159,14 +158,14 @@ function vaciarCombo(combo) {
 
 function loadComboCarrito() {
     return carritosApi.getIds()
-        .then(ids => {
+        .then(carritos => {
             const combo = document.getElementById('comboCarritos');
             vaciarCombo(combo)
             combo.appendChild(crearOpcionInicial('elija un carrito'))
-            for (const id of ids) {
+            for (const carrito of carritos.value) {
                 const comboItem = document.createElement("option");
-                comboItem.value = id;
-                comboItem.text = id;
+                comboItem.value = carrito.id;
+                comboItem.text = carrito.id;
                 combo.appendChild(comboItem);
             }
         })
