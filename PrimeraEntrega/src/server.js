@@ -18,10 +18,23 @@ app.use(express.static('../public'));
 const esAdmin = true
 
 function crearErrorNoEsAdmin(ruta, metodo) {
-    
+    const error = {
+        error: 1,
+    }
+    if (ruta && metodo) {
+        error.routerProducts= `ruta '${ruta}' metodo '${metodo}' no autorizado`;
+    } else {
+        error.descripcion = 'no autorizado';
+    }
+    return error;
 }
 
 function soloAdmins(req, res, next) {
+    if (!esAdmin) {
+        res.json(crearErrorNoEsAdmin());
+    } else {
+        next();
+    } 
 }
 
 //Router Productos
@@ -56,13 +69,13 @@ routerProducts.get('/:id', (req, res) => {
 
 });
 //Agrega un producto
-routerProducts.post('/', (req, res) => {
+routerProducts.post('/', soloAdmins, (req, res) => {
     let product = productsApi.save(req.body);
     res.json({ product });
     
 });
 //modifica un producto
-routerProducts.put('/:id', (req, res) => {
+routerProducts.put('/:id', soloAdmins, (req, res) => {
 
     let unProd = productsApi.updateById(req.params.id, req.body);
 
@@ -76,7 +89,7 @@ routerProducts.put('/:id', (req, res) => {
 
 });
 //elimina un producto
-routerProducts.delete('/:id', (req, res) => {
+routerProducts.delete('/:id', soloAdmins, (req, res) => {
     const idProd = req.params.id;
     let id = productsApi.deleteById(idProd);
     res.json({id: idProd});

@@ -68,5 +68,32 @@
     "stock": "15",
     "id": 8,
     "timestamp": "2022-04-28T04:20:55.462Z"
+  },
+  {
+    "title": "disfraz pizza",
+    "description": "pizza",
+    "code": "432",
+    "price": "1000",
+    "thumbnail": "https://cdn-icons-png.flaticon.com/128/7384/7384320.png",
+    "stock": "2",
+    "id": 9,
+    "timestamp": "2022-04-28T04:41:19.251Z"
+  },
+  {
+    "title": "disfraz pizza",
+    "description": "431",
+    "code": "pizza",
+    "price": "1000",
+    "thumbnail": "https://cdn-icons-png.flaticon.com/128/7384/7384320.png",
+    "stock": "2",
+    "id": 10,
+    "timestamp": "2022-04-28T04:41:28.905Z"
+  },
+  {
+    "title": "asasasas",
+    "price": 34343,
+    "thumbnail": "mascara.jpg",
+    "id": 11,
+    "timestamp": "2022-04-28T04:41:40.236Z"
   }
 ]
