@@ -1,27 +1,36 @@
 [
   {
     "id": "1",
-    "timestamp": "2022-04-28T04:00:54.555Z",
+    "timestamp": "2022-04-28T04:21:48.465Z",
     "productos": [
       {
-        "title": "disfraz elefante",
-        "price": "1800",
-        "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384290.png",
-        "id": 5,
-        "timestamp": 1651107542976
-      },
-      {
-        "title": "disfraz faraon",
-        "price": "1400",
-        "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384308.png",
-        "id": 6,
-        "timestamp": 1651107542976
-      },
-      {
         "title": "disfraz cactus ",
+        "description": "cactus",
+        "code": "118",
         "price": "1700",
         "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384277.png",
+        "stock": "10",
         "id": "1",
+        "timestamp": 1651107542976
+      },
+      {
+        "title": "disfraz robot",
+        "description": "robot",
+        "code": "114",
+        "price": "2500",
+        "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384274.png",
+        "stock": "10",
+        "id": "2",
+        "timestamp": 1651107542976
+      },
+      {
+        "title": "disfraz payaso",
+        "description": "payaso",
+        "code": "010",
+        "price": "1100",
+        "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384294.png",
+        "stock": "10",
+        "id": 4,
         "timestamp": 1651107542976
       }
     ]
