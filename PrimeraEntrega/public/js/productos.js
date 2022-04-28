@@ -88,10 +88,13 @@ function actualizarProducto(idProd) {
 }
 
 
-function llenarFormulario(title = '', price = '', thumbnail = '') {
+function llenarFormulario(title = '', description = '', code= '', price = '', thumbnail = '', stock = '') {
     formAgregarProducto[0].value = title
-    formAgregarProducto[1].value = price
-    formAgregarProducto[2].value = thumbnail
+    formAgregarProducto[1].value = description
+    formAgregarProducto[2].value = code
+    formAgregarProducto[3].value = price
+    formAgregarProducto[4].value = thumbnail
+    formAgregarProducto[5].value = stock
 }
 
 function makeHtmlTable(productos) {
@@ -118,7 +121,7 @@ function makeHtmlTable(productos) {
             
             html += `
                     <tr>
-                    <td><a type="button" onclick="llenarFormulario('${prod.title}', '${prod.price}','${prod.thumbnail}')" title="copiar a formulario...">${prod.title}</a></td>
+                    <td><a type="button" onclick="llenarFormulario('${prod.title}', '${prod.code}', '${prod.description}', '${prod.price}','${prod.thumbnail}', '${prod.stock}')" title="copiar a formulario...">${prod.title}</a></td>
                     <td>$${prod.price}</td>
                     <td><img width="50" src=${prod.thumbnail} alt="not found"></td>
                     <td><a type="button" onclick="borrarProducto('${prod.id}')">borrar</a></td>
