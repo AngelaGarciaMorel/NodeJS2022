@@ -32,7 +32,6 @@ class Contenedor {
     }
     async updateById(id, objeto) {
         try {
-            console.log('objeto:' + JSON.stringify(objeto));
             objeto.id = id;
             objeto.timestamp = new Date();
             const fs = require('fs');
@@ -64,11 +63,8 @@ class Contenedor {
                 
                 const objetoDelId = new Object;
                 info.forEach(element => {
-                    console.log('element.id:' + element.id);
-                    console.log('idObjeto:' + idObjeto);
                     if(element.id == idObjeto)
                         Object.assign(objetoDelId,element);
-                        console.log('objetoDelId:' + JSON.stringify(objetoDelId));
                 });
 
                 return objetoDelId;

@@ -131,25 +131,21 @@ routerCart.post('/', (req, res) => {
     
 });
 
-routerCart.post('/:id/productos', (req, res) => {
-    console.log('parametro:' + JSON.stringify(req.params.id));
-    
-    let unIdProd = req.body.id;
-    console.log('id:' + unIdProd);
-    let unProd = productsApi.getById(unIdProd);
+routerCart.post('/:id/productos', (req, res) => {   
+    let unProd = productsApi.getById(req.body.id);
+
     unProd.then( value => {   
-        console.log('id Carrito:' + req.params.id); 
         let unCarrito = cartApi.getById(req.params.id);
+
         unCarrito.then( valueCarrito => { 
-            console.log('valueCarrito.productos:' + valueCarrito.productos);  
             if (valueCarrito.productos === undefined) {
                 valueCarrito.productos = [];  
             }           
             valueCarrito.productos.push(value);
-            console.log('valueCarrito.productos segunda parte:' + JSON.stringify(valueCarrito)); 
-            valueCarrito = cartApi.updateById(req.params.id, unCarrito);
+            
+            valueCarrito = cartApi.updateById(req.params.id, valueCarrito);
             valueCarrito.then( value2Carrito => {
-                if(valvalue2Carritoue === null){
+                if(value2Carrito === null){
                     res.json({ error : 'producto no encontrado' });
                 } else {
                     res.json({value2Carrito});

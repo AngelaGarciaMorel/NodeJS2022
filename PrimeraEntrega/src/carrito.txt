@@ -1,7 +1,23 @@
 [
   {
     "id": "1",
-    "timestamp": "2022-04-28T02:30:07.244Z"
+    "timestamp": "2022-04-28T02:41:46.401Z",
+    "productos": [
+      {
+        "title": "disfraz robot",
+        "price": "2500",
+        "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384274.png",
+        "id": "2",
+        "timestamp": 1651107542976
+      },
+      {
+        "title": "disfraz payaso",
+        "price": "1100",
+        "thumbnail": "https://cdn-icons-png.flaticon.com/512/7384/7384294.png",
+        "id": 4,
+        "timestamp": 1651107542976
+      }
+    ]
   },
   {
     "id": "2",
