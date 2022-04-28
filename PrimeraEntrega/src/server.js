@@ -55,13 +55,13 @@ routerProducts.get('/:id', (req, res) => {
     });
 
 });
-
+//Agrega un producto
 routerProducts.post('/', (req, res) => {
     let product = productsApi.save(req.body);
     res.json({ product });
     
 });
-
+//modifica un producto
 routerProducts.put('/:id', (req, res) => {
 
     let unProd = productsApi.updateById(req.params.id, req.body);
@@ -75,7 +75,7 @@ routerProducts.put('/:id', (req, res) => {
     });
 
 });
-
+//elimina un producto
 routerProducts.delete('/:id', (req, res) => {
     const idProd = req.params.id;
     let id = productsApi.deleteById(idProd);
