@@ -1,6 +1,7 @@
 const knewLib = require('knex');
+import { asPOJO } from '../utils/objectUtils.js'
 
-class ContenedorBD {
+class ContenedorSQL {
 
     constructor(config, table){
         this.knex = knewLib(config);
@@ -24,4 +25,4 @@ class ContenedorBD {
     }
 }
 
-module.exports = {ContenedorBD};
+export default ContenedorSQL

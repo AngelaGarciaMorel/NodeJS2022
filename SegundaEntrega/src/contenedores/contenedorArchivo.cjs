@@ -1,5 +1,7 @@
 
-class Contenedor {
+import { promises as fs } from 'fs'
+import config from '../config.js'
+class ContenedorArchivo {
     constructor(nombreArchivo){
         this.nombreArchivo = nombreArchivo;
     }
@@ -150,4 +152,4 @@ class Contenedor {
 
 }
 
-module.exports = {Contenedor};
+export default ContenedorArchivo
