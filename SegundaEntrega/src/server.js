@@ -54,8 +54,21 @@ routerProducts.get('/:id', (req, res) => {
             res.json({value});
         }
     });
-
 });
+
+//modifica un producto
+routerProducts.put('/:id', soloAdmins, (req, res) => {
+
+    productsApi.updateById(req.params.id, req.body)
+    .then( value => {    
+        if(value === null){
+            res.json({ error : 'producto no encontrado' });
+        } else {
+            res.json({value});
+        }
+    });
+});
+
 
 // //Router Carrito    
 const routerCart = new Router();
@@ -107,20 +120,9 @@ app.use('/api/carritos', routerCart)
 //     res.json({ product });
     
 // });
-// //modifica un producto
-// routerProducts.put('/:id', soloAdmins, (req, res) => {
 
-//     let unProd = productsApi.updateById(req.params.id, req.body);
 
-//     unProd.then( value => {    
-//         if(value === null){
-//             res.json({ error : 'producto no encontrado' });
-//         } else {
-//             res.json({value});
-//         }
-//     });
 
-// });
 // //elimina un producto
 // routerProducts.delete('/:id', soloAdmins, (req, res) => {
 //     const idProd = req.params.id;
