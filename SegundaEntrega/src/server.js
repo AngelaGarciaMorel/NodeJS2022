@@ -4,16 +4,11 @@ const { Router } = express
 //instancia del servidor
 const app = express();
 
-
-
-
 //intancia de la persistencia
 import {
     productosDao as productsApi,
     //carritosDao as cartApi
 } from './daos/index.js'
-
-//console.log('productosDao: ' +productosDao)
 
 // permisos de administrador MIDDLEWARES
 const esAdmin = true
@@ -42,7 +37,7 @@ function soloAdmins(req, res, next) {
 const routerProducts = new Router();
 
 routerProducts.get('/', async (req, res) => {
-    const products = productsApi.readAll()
+    productsApi.readAll()
     .then(products => {
         console.log(products);
         res.json(products)
@@ -50,11 +45,26 @@ routerProducts.get('/', async (req, res) => {
 
 })
 
+routerProducts.get('/:id', (req, res) => {
+    productsApi.readById(req.params.id)
+    .then( value => {
+        if(value === null){
+            res.json({ error : 'producto no encontrado' });
+        } else {
+            res.json({value});
+        }
+    });
+
+});
+
 // //Router Carrito    
 const routerCart = new Router();
 routerCart.get('/', async (req, res) => {
-    const carts = await cartApi.listarAll()
-    res.json(carts)
+    cartApi.readAll()
+    .then(carts => {
+        console.log(carts);
+        res.json(carts)
+    })
 })
 //--------------------------------------------
 // configuro el servidor

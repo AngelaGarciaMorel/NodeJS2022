@@ -20,11 +20,15 @@ class ContenedorMongoDb {
 
     //     return this.model.save(object);
     // }
+    
     //get all
     readAll(){
-        console.log('this.model: ' + JSON.stringify(this.model))
         return this.model.find({});
     }
+    //get by id
+    readById(id){
+        return this.model.findById(1);
+    }    
     // deletebyid
 
     //updateby id
