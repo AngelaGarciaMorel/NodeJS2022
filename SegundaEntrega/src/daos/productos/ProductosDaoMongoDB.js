@@ -4,14 +4,14 @@ class ProductosDaoMongoDb extends ContenedorMongoDb {
 
     constructor() {
         const productSchema = {
-            _id: { type: Number, required: true },
+            //_id: { type: Number},
             title: { type: String, required: true },
-            description: { type: String, required: true},
-            code: { type: String, required: true }, 
+            description: { type: String},
+            code: { type: String}, 
             price: { type: Number, required: true },
             thumbnail: { type: String, required: true },
             stock: { type: Number, required: true },
-            timestamp: { type: Date, required: true }
+            timestamp: { type: Date}
         };
 
         super('productos', productSchema);

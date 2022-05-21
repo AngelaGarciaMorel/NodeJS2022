@@ -4,8 +4,8 @@ import config from '../config.js'
 
 class ContenedorMongoDb {
 
-    constructor(table, eschema){
-        this.schema = new mongoose.Schema(eschema)
+    constructor(table, schema){
+        this.schema = new mongoose.Schema(schema)
 
         this.model = mongoose.model(table,this.schema);
         mongoose.connect(config.mongodb.URL, {
@@ -15,10 +15,10 @@ class ContenedorMongoDb {
     }
 
     //insert
-    // insert(object){
-
-    //     return this.model.save(object);
-    // }
+    insert(object){
+        const savedObject = new this.model(object);
+        return savedObject.save(object);
+    }
 
     //get all
     getAll(){

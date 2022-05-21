@@ -56,6 +56,14 @@ routerProducts.get('/:id', (req, res) => {
     });
 });
 
+// //Agrega un producto
+routerProducts.post('/', soloAdmins, (req, res) => {
+    productsApi.insert(req.body)
+    .then(product => {
+        res.json({ product });
+    })    
+});
+
 //modifica un producto
 routerProducts.put('/:id', soloAdmins, (req, res) => {
 
@@ -122,12 +130,7 @@ app.use('/api/carritos', routerCart)
 //     });
 
 // });
-// //Agrega un producto
-// routerProducts.post('/', soloAdmins, (req, res) => {
-//     let product = productsApi.save(req.body);
-//     res.json({ product });
-    
-// });
+
 
 
 
