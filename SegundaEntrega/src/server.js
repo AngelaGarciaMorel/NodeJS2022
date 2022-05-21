@@ -37,7 +37,7 @@ function soloAdmins(req, res, next) {
 const routerProducts = new Router();
 
 routerProducts.get('/', async (req, res) => {
-    productsApi.readAll()
+    productsApi.getAll()
     .then(products => {
         console.log(products);
         res.json(products)
@@ -46,7 +46,7 @@ routerProducts.get('/', async (req, res) => {
 })
 
 routerProducts.get('/:id', (req, res) => {
-    productsApi.readById(req.params.id)
+    productsApi.getById(req.params.id)
     .then( value => {
         if(value === null){
             res.json({ error : 'producto no encontrado' });
@@ -68,7 +68,15 @@ routerProducts.put('/:id', soloAdmins, (req, res) => {
         }
     });
 });
+// //elimina un producto
+routerProducts.delete('/:id', soloAdmins, (req, res) => {
+    const idProd = req.params.id;
+    productsApi.deleteById(idProd)
+    .then(idProd => {
+        res.json({id: idProd});
+    })
 
+});
 
 // //Router Carrito    
 const routerCart = new Router();

@@ -21,28 +21,20 @@ class ContenedorMongoDb {
     // }
 
     //get all
-    readAll(){
+    getAll(){
         return this.model.find({});
     }
     //get by id
-    readById(id){
+    getById(id){
         return this.model.findById(id);
     }    
     // deletebyid
-
+    deleteById(id){
+        return this.model.deleteOne({_id:id})
+    }
     //updateby id
     updateById(id, object){
-        console.log('id: ' + id)
-
-        const updates = {};
-        for (let i = 0; i < Object.keys(object).length; i++) {
-            console.log('object param: ' + JSON.stringify(Object.keys(object)[i]))
-            updates[Object.keys(object)[i]] = Object.values(object)[i];
-            console.log('updates: ' + JSON.stringify(updates))
-        }
-
-        //return this.model.updateOne({_id:id}, {$set: updates})
-        return this.model.findOneAndUpdate({_id:id}, updates)
+        return this.model.findOneAndUpdate({_id:id}, object)
     }
 
 }
