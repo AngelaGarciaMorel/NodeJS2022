@@ -17,16 +17,8 @@ class ContenedorFirebase {
         //CREATE
         insert(object) {
             try {
-                let id = 1;
-                let doc = query.doc(`${object.id}`);
-                await doc.create({nombre: 'Alex', dni: 878973213});
-                id ++;
-                doc = query.doc(`${id}`);
-                await doc.create({nombre: 'Ana', dni: 43986483956});
-                id ++;
-                doc = query.doc(`${id}`);
-                await doc.create({nombre: 'Jose', dni: 123213123});
-                console.log('datos insertados');
+               return await query.add(object);
+
             } catch (error) {
                 console.log(error);
             }           
@@ -34,51 +26,49 @@ class ContenedorFirebase {
 
     
         //READ ALL
-        // try {
-        //     const querySnapshot = await query.get();
-        //     let docs = querySnapshot.docs;
-    
-        //     const response = docs.map((doc) => ({
-        //         id: doc.id,
-        //         nombre: doc.data().nombre,
-        //         dni: doc.data().dni
-        //     }));
-    
-        //     console.log(response);
-        // } catch (error) {
-        //     console.log(error);
-        // }
-    
+        readAll(){
+            try {
+                const querySnapshot = await query.get();
+                return querySnapshot.docs;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+
         //READ BY ID
-        // try {
-        //     let id = 2;
-        //     const doc = query.doc(`${id}`);
-        //     const item = await doc.get();
-        //     const response = item.data();
-        //     console.log(response);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        readById(id){
+            try {
+                const doc = query.doc(`${id}`);
+                return await doc.get();
+            } catch (error) {
+                console.log(error);
+            }           
+        }
+
     
         // UPDATE
-        // try {
-        //     let id = 2;
-        //     const doc = query.doc(`${id}`);
-        //     let item = await doc.update({dni: 123})
-        //     console.log(item);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        updateById(id){
+            try {
+                const doc = query.doc(`${id}`);
+                return await doc.update({dni: 123})
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
     
         // DELETE
-        // try {
-        //     let id = 1;
-        //     const doc = query.doc(`${id}`);
-        //     let item = await doc.delete();
-        //     console.log(item);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        deleteById(id){
+            try {
+                const doc = query.doc(`${id}`);
+                return await doc.delete();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
 }
 
 export default ContenedorFirebase
