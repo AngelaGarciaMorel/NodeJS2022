@@ -1,5 +1,9 @@
 let productosDao
 let carritosDao
+process.env.PERS = 'mongodb';
+//process.env.PERS = 'firebase';
+
+console.log('process.env.PERS: ' +process.env.PERS)
 
 switch (process.env.PERS) {
     case 'json':
@@ -21,7 +25,8 @@ switch (process.env.PERS) {
         const { default: CarritosDaoMongoDB } = await import('./carritos/CarritosDaoMongoDB.js')
 
         productosDao = new ProductosDaoMongoDB()
-        carritosDao = new CarritosDaoMongoDB()
+        //carritosDao = new CarritosDaoMongoDB()
+        console.log('Hola: ' + productosDao);
         break        
     case 'mariadb':
         const { default: ProductosDaoMariaDB } = await import('./productos/ProductosDaoMariaDB.js')
