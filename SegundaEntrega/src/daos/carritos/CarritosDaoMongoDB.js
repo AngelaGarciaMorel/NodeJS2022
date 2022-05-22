@@ -20,16 +20,15 @@ class CarritosDaoMongoDb extends ContenedorMongoDb {
             super.updateById(idCart, valueCarrito)
             .then( value2Carrito => {
                 if(value2Carrito === null){
-                    return('producto no encontrado');
+                    return 'producto no encontrado';
                 } else {
-                    return(value2Carrito);
+                    return value2Carrito;
                 }
             });
         });
     }
 
     deleteProductFromCart(idCart,idProduct){
-        console.log('idProduct: '+ idProduct)
         super.getById(idCart) 
         .then( cart => {
             for (let index = 0; index < cart.productos.length; index++) {
@@ -42,7 +41,11 @@ class CarritosDaoMongoDb extends ContenedorMongoDb {
             }               
             super.updateById(idCart, cart)
             .then(result => {
-                console.log('result: '+ result)
+                if(result === null){
+                    return 'producto no encontrado';
+                } else {
+                    return result;
+                }
             })    
         });
            

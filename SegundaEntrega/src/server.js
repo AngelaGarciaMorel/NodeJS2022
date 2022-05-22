@@ -121,8 +121,6 @@ routerCart.get('/:id/productos', (req, res) => {
 routerCart.post('/:id/productos', (req, res) => { 
     productsApi.getById(req.body._id)
     .then( product => { 
-        console.log('product: ' + JSON.stringify(product))   
-
         res.json(cartApi.addProductsinCart(req.params.id,product)); 
     })
        
@@ -140,8 +138,10 @@ routerCart.delete('/:id', (req, res) => {
 // //elimina un producto del carrito
 routerCart.delete('/:id/productos/:idP', (req, res) => {
     const idProd = req.params.id;
-    let id = cartApi.deleteProductFromCart(req.params.id,req.params.idP);
-    res.json({id: idProd});
+    const resp = cartApi.deleteProductFromCart(req.params.id,req.params.idP)
+    res.json(resp);
+
+
 });
 
 //--------------------------------------------
