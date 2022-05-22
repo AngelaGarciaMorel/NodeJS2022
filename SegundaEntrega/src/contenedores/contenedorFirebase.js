@@ -31,26 +31,14 @@ class ContenedorFirebase {
                 const querySnapshot =  await this.query.get();
                 let documents = [];
                 querySnapshot.forEach(doc => {
-                    console.log(doc.id, '=>', doc.data());
                     let newDoc = {};
                     newDoc = doc.data();
                     newDoc.id = doc.id;
                     console.log(newDoc)
-                    return newDoc;
+                    documents.push(newDoc);
+                    return documents;
                 });
-                
-                        //     response = docs.map((doc) => ({
-        //         id: doc.id,
-        //         title: doc.data().title,
-        //         description: doc.data().description,
-        //         code: doc.data().code,
-        //         price: doc.data().price,
-        //         thumbnail: doc.data().thumbnail,
-        //         stock: doc.data().stock,
-        //         timestamp: doc.data().timestamp
-        //     }));
-                //console.log('querySnapshot inside: '+ JSON.stringify(querySnapshot.docs));
-                //return  querySnapshot;
+
             } catch (error) {
                 console.log(error);
             }
@@ -60,7 +48,7 @@ class ContenedorFirebase {
         //READ BY ID
         async getById(id){
             try {
-                const doc =  this.query.doc(`${id}`);
+                const doc = this.query.doc(`${id}`);
                 return await doc.get();
             } catch (error) {
                 console.log(error);
@@ -69,10 +57,10 @@ class ContenedorFirebase {
 
     
         // UPDATE
-        async updateById(id){
+        async updateById(id, body){
             try {
                 const doc =  this.query.doc(`${id}`);
-                return await doc.update({dni: 123})
+                return await doc.update(body)
 
             } catch (error) {
                 console.log(error);

@@ -1,7 +1,7 @@
 let productosDao
 let carritosDao
-//process.env.PERS = 'mongodb';
-process.env.PERS = 'firebase';
+process.env.PERS = 'mongodb';
+//process.env.PERS = 'firebase';
 
 console.log('process.env.PERS: ' +process.env.PERS)
 
