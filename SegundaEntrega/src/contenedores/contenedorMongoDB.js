@@ -34,6 +34,7 @@ class ContenedorMongoDb {
     }
     //updateby id
     updateById(id, object){
+        console.log('object: ' + JSON.stringify(object))
         return this.model.findOneAndUpdate({_id:id}, object)
     }
 

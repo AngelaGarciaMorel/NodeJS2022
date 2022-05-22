@@ -137,6 +137,13 @@ routerCart.delete('/:id', (req, res) => {
 
 });
 
+// //elimina un producto del carrito
+routerCart.delete('/:id/productos/:idP', (req, res) => {
+    const idProd = req.params.id;
+    let id = cartApi.deleteProductFromCart(req.params.id,req.params.idP);
+    res.json({id: idProd});
+});
+
 //--------------------------------------------
 // configuro el servidor
 
@@ -152,12 +159,6 @@ app.use('/api/carritos', routerCart)
 
 // //Servicios Carrito
 
-// //elimina un carrito
-// routerCart.delete('/:id', (req, res) => {
-//     const idProd = req.params.id;
-//     let id = cartApi.deleteById(req.params.id);
-//     res.json({id: idProd});
-// });
 
 // //elimina un producto del carrito
 // routerCart.delete('/:id/productos/:idP', (req, res) => {
