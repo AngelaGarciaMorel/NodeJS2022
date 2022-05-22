@@ -3,21 +3,21 @@ import config from '../config.js'
 
 class ContenedorFirebase {
     constructor(collectionName){
-        this.model = model;
         const serviceAccount = config.firebase.serviceAccount;
-
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount),
-          databaseURL: config.firebase.databaseURL
-        });
+        if (!admin.apps.length) {
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount),
+                databaseURL: config.firebase.databaseURL
+              });
+        }
         this.db = admin.firestore();
-        this.query = db.collection(collectionName);
+        this.query = this.db.collection(collectionName);
     }
 
         //CREATE
-        insert(object) {
+        async insert(object) {
             try {
-               return await query.add(object);
+               return await  this.query.add(object);
 
             } catch (error) {
                 console.log(error);
@@ -26,10 +26,31 @@ class ContenedorFirebase {
 
     
         //READ ALL
-        readAll(){
+        async getAll(){
             try {
-                const querySnapshot = await query.get();
-                return querySnapshot.docs;
+                const querySnapshot =  await this.query.get();
+                let documents = [];
+                querySnapshot.forEach(doc => {
+                    console.log(doc.id, '=>', doc.data());
+                    let newDoc = {};
+                    newDoc = doc.data();
+                    newDoc.id = doc.id;
+                    console.log(newDoc)
+                    return newDoc;
+                });
+                
+                        //     response = docs.map((doc) => ({
+        //         id: doc.id,
+        //         title: doc.data().title,
+        //         description: doc.data().description,
+        //         code: doc.data().code,
+        //         price: doc.data().price,
+        //         thumbnail: doc.data().thumbnail,
+        //         stock: doc.data().stock,
+        //         timestamp: doc.data().timestamp
+        //     }));
+                //console.log('querySnapshot inside: '+ JSON.stringify(querySnapshot.docs));
+                //return  querySnapshot;
             } catch (error) {
                 console.log(error);
             }
@@ -37,9 +58,9 @@ class ContenedorFirebase {
 
 
         //READ BY ID
-        readById(id){
+        async getById(id){
             try {
-                const doc = query.doc(`${id}`);
+                const doc =  this.query.doc(`${id}`);
                 return await doc.get();
             } catch (error) {
                 console.log(error);
@@ -48,9 +69,9 @@ class ContenedorFirebase {
 
     
         // UPDATE
-        updateById(id){
+        async updateById(id){
             try {
-                const doc = query.doc(`${id}`);
+                const doc =  this.query.doc(`${id}`);
                 return await doc.update({dni: 123})
 
             } catch (error) {
@@ -60,9 +81,9 @@ class ContenedorFirebase {
 
     
         // DELETE
-        deleteById(id){
+        async deleteById(id){
             try {
-                const doc = query.doc(`${id}`);
+                const doc =  this.query.doc(`${id}`);
                 return await doc.delete();
             } catch (error) {
                 console.log(error);

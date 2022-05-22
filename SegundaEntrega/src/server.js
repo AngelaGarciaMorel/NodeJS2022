@@ -39,7 +39,7 @@ const routerProducts = new Router();
 routerProducts.get('/', async (req, res) => {
     productsApi.getAll()
     .then(products => {
-        console.log(products);
+        console.log('products: '+products); // no se por qué con firebase trae datos vacios
         res.json(products)
     })
 
