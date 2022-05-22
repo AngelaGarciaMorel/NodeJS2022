@@ -128,6 +128,15 @@ routerCart.post('/:id/productos', (req, res) => {
        
 });
 
+// //elimina un carrito
+routerCart.delete('/:id', (req, res) => {
+    cartApi.deleteById(req.params.id)
+    .then(id => {
+        res.json({id: id});
+    })
+
+});
+
 //--------------------------------------------
 // configuro el servidor
 
@@ -142,34 +151,6 @@ app.use('/api/carritos', routerCart)
 
 
 // //Servicios Carrito
-
-
-
-
-// //agrega un producto al carrito
-// routerCart.post('/:id/productos', (req, res) => {   
-//     let unProd = productsApi.getById(req.body.id);
-
-//     unProd.then( value => {   
-//         let unCarrito = cartApi.getById(req.params.id);
-
-//         unCarrito.then( valueCarrito => { 
-//             if (valueCarrito.productos === undefined) {
-//                 valueCarrito.productos = [];  
-//             }           
-//             valueCarrito.productos.push(value);
-            
-//             valueCarrito = cartApi.updateById(req.params.id, valueCarrito);
-//             valueCarrito.then( value2Carrito => {
-//                 if(value2Carrito === null){
-//                     res.json({ error : 'producto no encontrado' });
-//                 } else {
-//                     res.json({value2Carrito});
-//                 }
-//             });
-//         });
-//     });    
-// });
 
 // //elimina un carrito
 // routerCart.delete('/:id', (req, res) => {
