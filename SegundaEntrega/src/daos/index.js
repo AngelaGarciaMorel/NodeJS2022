@@ -25,8 +25,8 @@ switch (process.env.PERS) {
         const { default: CarritosDaoMongoDB } = await import('./carritos/CarritosDaoMongoDB.js')
 
         productosDao = new ProductosDaoMongoDB()
-        //carritosDao = new CarritosDaoMongoDB()
-        console.log('Hola: ' + productosDao);
+        carritosDao = new CarritosDaoMongoDB()
+
         break        
     case 'mariadb':
         const { default: ProductosDaoMariaDB } = await import('./productos/ProductosDaoMariaDB.js')
@@ -42,9 +42,8 @@ switch (process.env.PERS) {
         productosDao = new ProductosDaoSQLite3()
         carritosDao = new CarritosDaoSQLite3()
         break       
-    default:
-        
+    default:     
         break
 }
 
-export { productosDao, carritosDao }
+export  { productosDao, carritosDao }

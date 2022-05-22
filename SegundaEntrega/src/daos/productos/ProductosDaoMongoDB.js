@@ -16,8 +16,6 @@ class ProductosDaoMongoDb extends ContenedorMongoDb {
 
         super('productos', productSchema);
     }
-
-
 }
 
 export default ProductosDaoMongoDb

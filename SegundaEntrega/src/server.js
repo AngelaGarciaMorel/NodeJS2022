@@ -7,7 +7,7 @@ const app = express();
 //intancia de la persistencia
 import {
     productosDao as productsApi,
-    //carritosDao as cartApi
+    carritosDao as cartApi
 } from './daos/index.js'
 
 // permisos de administrador MIDDLEWARES
@@ -89,12 +89,45 @@ routerProducts.delete('/:id', soloAdmins, (req, res) => {
 // //Router Carrito    
 const routerCart = new Router();
 routerCart.get('/', async (req, res) => {
-    cartApi.readAll()
+    cartApi.getAll()
     .then(carts => {
         console.log(carts);
         res.json(carts)
     })
 })
+
+// //agrega un carrito
+routerCart.post('/', (req, res) => {
+    let id = cartApi.insert(req.body);
+    res.json({ id });
+    
+});
+
+
+// //obtiene los productos del carrito
+routerCart.get('/:id/productos', (req, res) => {
+    cartApi.getById(req.params.id)
+   .then( value => {
+        if(value === null){
+            res.json({ error : 'No hay productos' });
+        } else {
+            res.json({value});
+        }
+    });
+
+});
+
+// //agrega un producto al carrito
+routerCart.post('/:id/productos', (req, res) => { 
+    productsApi.getById(req.body._id)
+    .then( product => { 
+        console.log('product: ' + JSON.stringify(product))   
+
+        res.json(cartApi.addProductsinCart(req.params.id,product)); 
+    })
+       
+});
+
 //--------------------------------------------
 // configuro el servidor
 
@@ -106,87 +139,12 @@ app.use(express.static('../public'));
 app.use('/api/productos', routerProducts)
 app.use('/api/carritos', routerCart)
 
-//Servicios Productos
-// routerProducts.get('/', (req, res) => {
-//     listaProductos = productsApi.getAll();
-//     listaProductos.then( value => {
-//         if(value === null){
-//             res.json({ error : 'No hay productos disponibles' });
-//         } else {
-//             res.json({value});
-//         }
-//     });
-
-// });
-
-// routerProducts.get('/:id', (req, res) => {
-//     let unProd = productsApi.getById(req.params.id);
-//     unProd.then( value => {
-//         if(value === null){
-//             res.json({ error : 'producto no encontrado' });
-//         } else {
-//             res.json({value});
-//         }
-//     });
-
-// });
-
-
-
-
-// //elimina un producto
-// routerProducts.delete('/:id', soloAdmins, (req, res) => {
-//     const idProd = req.params.id;
-//     let id = productsApi.deleteById(idProd);
-//     res.json({id: idProd});
-// });
 
 
 // //Servicios Carrito
-// //obtiene todos los carritos
-// routerCart.get('/', (req, res) => {
-//     listaCarritos = cartApi.getAll();
-//     listaCarritos.then( value => {
-//         if(value === null){
-//             res.json({ error : 'No hay productos disponibles' });
-//         } else {
-//             res.json({value});
-//         }
-//     });
 
-// });
 
-// routerCart.get('/:id', (req, res) => {
-//     let unProd = cartApi.getById(req.params.id);
-//     unProd.then( value => {
-//         if(value === null){
-//             res.json({ error : 'producto no encontrado' });
-//         } else {
-//             res.json({value});
-//         }
-//     });
 
-// });
-
-// //obtiene los productos del carrito
-// routerCart.get('/:id/productos', (req, res) => {
-//     let unProd = cartApi.getById(req.params.id);
-//     unProd.then( value => {
-//         if(value === null){
-//             res.json({ error : 'producto no encontrado' });
-//         } else {
-//             res.json({value});
-//         }
-//     });
-
-// });
-
-// //agrega un carrito
-// routerCart.post('/', (req, res) => {
-//     let id = cartApi.save(req.body);
-//     res.json({ id });
-    
-// });
 
 // //agrega un producto al carrito
 // routerCart.post('/:id/productos', (req, res) => {   
