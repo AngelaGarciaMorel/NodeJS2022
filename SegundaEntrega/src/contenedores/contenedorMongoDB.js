@@ -37,7 +37,15 @@ class ContenedorMongoDb {
         console.log('object: ' + JSON.stringify(object))
         return this.model.findOneAndUpdate({_id:id}, object)
     }
-
+    // // deleteChildbyid
+    // deleteChildById(idParent,idChild){
+    //     this.model.children._id(idParent).remove();
+    //     this.model.child.remove();
+    //     return this.model.save(function (err) {
+    //         if (err) return handleError(err);
+    //         console.log('the subdocs were removed');
+    //       });
+    // }
 }
 
 export default ContenedorMongoDb
