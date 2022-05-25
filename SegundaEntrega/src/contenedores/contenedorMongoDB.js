@@ -15,28 +15,52 @@ class ContenedorMongoDb {
     }
 
     //insert
-    insert(object){
-        const savedObject = new this.model(object);
-        return savedObject.save(object);
+    async insert(object){
+        try {
+            const savedObject = new this.model(object);
+            return await savedObject.save(object);           
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
     //get all
-    getAll(){
-        return this.model.find({});
+    async getAll(){
+        try {
+            return await this.model.find({});
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
     //get by id
-    getById(id){
-        return this.model.findById(id);
+    async getById(id){
+        try {
+            return await this.model.findById(id);  
+        } catch (error) {
+            console.log(error);
+        }
+        
     }    
     // deletebyid
-    deleteById(id){
-        return this.model.deleteOne({_id:id})
+    async deleteById(id){
+        try {
+            return await this.model.deleteOne({_id:id})
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
     //updateby id
-    updateById(id, object){
-        return this.model.findOneAndUpdate({_id:id}, object)
+    async updateById(id, object){
+        try {
+            return await this.model.findOneAndUpdate({_id:id}, object)
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
-
 }
 
 export default ContenedorMongoDb

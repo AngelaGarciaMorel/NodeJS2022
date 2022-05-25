@@ -1,20 +1,26 @@
 import ContenedorMongoDb from "../../contenedores/contenedorMongoDB.js"
+import { productCollection, productSchema } from '../../model/product.js';
 
 class ProductosDaoMongoDb extends ContenedorMongoDb {
 
     constructor() {
-        const productSchema = {
-            //_id: { type: Number},
-            title: { type: String, required: true },
-            description: { type: String},
-            code: { type: String}, 
-            price: { type: Number, required: true },
-            thumbnail: { type: String, required: true },
-            stock: { type: Number, required: true },
-            timestamp: { type: Date}
-        };
+        super(productCollection, productSchema);
+    }
 
-        super('productos', productSchema);
+    async getAll(){
+        return super.getAll() 
+    }
+    async getById(product){
+        return super.getById(product);
+    }
+    async insert(product){
+        return super.insert(product);
+    }
+    async updateById(idProduct, valueProduct){
+        return super.updateById(idProduct, valueProduct);
+    }
+    async deleteById(idProduct){
+        return super.deleteById(idProduct);
     }
 }
 

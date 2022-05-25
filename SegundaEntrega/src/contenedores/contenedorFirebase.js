@@ -29,16 +29,7 @@ class ContenedorFirebase {
         async getAll(){
             try {
                 const querySnapshot =  await this.query.get();
-                let documents = [];
-                querySnapshot.forEach(doc => {
-                    let newDoc = {};
-                    newDoc = doc.data();
-                    newDoc.id = doc.id;
-                    console.log(newDoc)
-                    documents.push(newDoc);
-                    return documents;
-                });
-
+                return querySnapshot.docs.map(doc => doc.data());
             } catch (error) {
                 console.log(error);
             }
@@ -49,7 +40,8 @@ class ContenedorFirebase {
         async getById(id){
             try {
                 const doc = this.query.doc(`${id}`);
-                return await doc.get();
+                const item = await doc.get()
+                return item.data()
             } catch (error) {
                 console.log(error);
             }           
@@ -59,14 +51,28 @@ class ContenedorFirebase {
         // UPDATE
         async updateById(id, body){
             try {
-                const doc =  this.query.doc(`${id}`);
+                const doc = this.query.doc(`${id}`);
                 return await doc.update(body)
-
             } catch (error) {
                 console.log(error);
             }
         }
+        // Delete child
+        async deleteChildById(id, childCollection, idChild){
+            try {
+                // define document location (Collection Name > Document Name > Collection Name >)
+                let docRef = this.query.doc(`${id}`).collection(childCollection);
+                // delete the document
+                return docRef.doc(idChild).delete();
 
+                // const doc =  this.query.doc(`${id}`).update({body});
+                // const ret =  await doc.update(body)
+                
+                // return ret      
+            } catch (error) {
+                console.log(error);
+            }
+        }
     
         // DELETE
         async deleteById(id){
