@@ -60,12 +60,22 @@ async function listarMensajesNormalizados() {
 
 //--------------------------------------------
 // agrego middlewares
-
+import path from 'path';
+const __dirname = path.resolve();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
+//app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 //--------------------------------------------
+// import path from 'path';
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+app.get("/",function (req, res) {
+    res.sendFile('productos-vista-test.html', { root: path.join(__dirname, '../public') });
+  });
 
 app.get('/api/productos-test', (req, res) => {
     faker.locale = 'es'
