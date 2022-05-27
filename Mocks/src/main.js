@@ -74,6 +74,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // const __dirname = path.dirname(__filename);
 
 app.get("/",function (req, res) {
+    console.log(__dirname)
     res.sendFile('productos-vista-test.html', { root: path.join(__dirname, '../public') });
   });
 
@@ -85,9 +86,9 @@ app.get('/api/productos-test', (req, res) => {
     
     for (let index = 0; index < 5; index++) {
         let prod= {}
-        prod.name = commerce.product()
+        prod.title = commerce.product()
         prod.price = commerce.price()
-        prod.image = image.food()
+        prod.thumbnail = image.image()
         prods.push(prod)
     } 
     

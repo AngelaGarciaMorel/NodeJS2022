@@ -32,7 +32,7 @@
         }
 
         function makeHtmlTable(productos) {
-            return fetch('plantillas/tabla-productos.hbs')
+            return fetch('/plantillas/tabla-productos.hbs')
                 .then(respuesta => respuesta.text())
                 .then(plantilla => {
                     const template = Handlebars.compile(plantilla);
