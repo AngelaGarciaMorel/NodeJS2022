@@ -68,14 +68,15 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, '../public')));
 
 //--------------------------------------------
-// import path from 'path';
-// import { fileURLToPath } from 'url';
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+
+app.get("/prodcuts",function (req, res) {
+    console.log(__dirname)
+    res.sendFile('productos-vista-test.html', { root: path.join(__dirname, '../public') });
+  });
 
 app.get("/",function (req, res) {
     console.log(__dirname)
-    res.sendFile('productos-vista-test.html', { root: path.join(__dirname, '../public') });
+    res.sendFile('index.html', { root: path.join(__dirname, '../public') });
   });
 
 app.get('/api/productos-test', (req, res) => {
