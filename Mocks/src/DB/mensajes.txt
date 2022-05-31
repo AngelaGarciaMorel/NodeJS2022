@@ -1,7 +1,4 @@
-
-  "id":"mensajes"",
-  "mensajes": 
-  [
+[
   {
     "author": {
                 id:"seran.angie@gmail.com",

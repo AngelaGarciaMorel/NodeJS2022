@@ -40,8 +40,7 @@ const posts = new schema.Entity('posts', {
 })
 
 console.log('--------------objeto normalizado--------')
-//const normalizeData = normalize(mensajesApi.getAll(), posts);
-//print(normalizeData)
+
 
 //--------------------------------------------
 // configuro el socket
@@ -77,7 +76,13 @@ io.on('connection', async socket => {
     socket.on('nuevoMensaje', message => {
         mensajesApi.save(message)
         .then(() => {
-        return normalize(mensajesApi.getAll(), posts);;
+            console.log('--------------objeto normalizado--------')
+
+            objParaNorm.id = "Mensajes";
+            objParaNorm.mensajes = mensajesApi.getAll();
+            const obj = normalize(objParaNorm, posts);
+            console.log(obj)
+        return obj
         })
         .then( value => {
             io.sockets.emit('mensajes', value);
@@ -88,7 +93,10 @@ io.on('connection', async socket => {
     });
 
     // actualizacion de mensajes
-    let messages = normalize(mensajesApi.getAll(), posts);;
+    objParaNorm.id = "Mensajes";
+    objParaNorm.mensajes = mensajesApi.getAll();
+    const obj = normalize(objParaNorm, posts);
+    let messages = normalize(obj, posts);
     messages.then( value => {
         io.sockets.emit('mensajes', value);
     })
