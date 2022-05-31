@@ -49,17 +49,53 @@ console.log('--------------objeto normalizado--------')
 io.on('connection', async socket => {
     console.log('Nuevo cliente conectado!');
 
-    // carga inicial de productos
-   
+    // // carga inicial de productos
+    // socket.on('new-product', product => {
+    //     sqlP.insert(product)
+    //     .then(() => {
+    //     return sqlP.getAll();
+    //     })
+    //     .then( value => {
+    //         io.sockets.emit('productos', value);
+    //     })
+    //     .catch((err) => {
+    //         console.log(err); throw err;
+    //     })
+    // });   
 
-    // actualizacion de productos
-    
+    // // actualizacion de productos
+    // let products = sqlP.getAll();
+    // products.then( value => {
+    //     io.sockets.emit('productos', value);
+    // })
+    // .catch((err) => {
+    //     console.log(err); throw err;
+    // })   
 
     // carga inicial de mensajes
-    
+
+    socket.on('nuevoMensaje', message => {
+        sqlS.insert(message)
+        .then(() => {
+        return sqlS.getAll();
+        })
+        .then( value => {
+            io.sockets.emit('mensajes', value);
+        })
+        .catch((err) => {
+            console.log(err); throw err;
+        })
+    });
 
     // actualizacion de mensajes
-    
+    let messages = sqlS.getAll();
+    messages.then( value => {
+        io.sockets.emit('mensajes', value);
+    })
+    .catch((err) => {
+        console.log(err); throw err;
+    })
+        
 });
 
 async function listarMensajesNormalizados() {
