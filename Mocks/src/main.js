@@ -21,19 +21,27 @@ const mensajesApi = new ContenedorArchivo(`${config.fileSystem.path}/mensajes.js
 
 //--------------------------------------------
 // NORMALIZACIÓN DE MENSAJES
-
+import normalizr from 'normalizr';
+const normalize = normalizr.normalize;
+const denormalize = normalizr.denormalize;
+const schema = normalizr.schema
 
 
 // Definimos un esquema de autor
-
+const author = new schema.Entity('author')
 
 // Definimos un esquema de mensaje
-
+const message = new schema.Entity('message')
 
 // Definimos un esquema de posts
+const posts = new schema.Entity('posts', {
+    author: author,
+    messages: [message]
+})
 
-
-
+console.log('--------------objeto normalizado--------')
+//const normalizeData = normalize(mensajesApi.getAll(), posts);
+//print(normalizeData)
 
 //--------------------------------------------
 // configuro el socket
@@ -69,7 +77,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 //--------------------------------------------
 
-app.get("/prodcuts",function (req, res) {
+app.get("/products",function (req, res) {
     console.log(__dirname)
     res.sendFile('productos-vista-test.html', { root: path.join(__dirname, '../public') });
   });
