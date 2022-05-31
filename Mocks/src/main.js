@@ -75,9 +75,9 @@ io.on('connection', async socket => {
     // carga inicial de mensajes
 
     socket.on('nuevoMensaje', message => {
-        sqlS.insert(message)
+        mensajesApi.save(message)
         .then(() => {
-        return sqlS.getAll();
+        return normalize(mensajesApi.getAll(), posts);;
         })
         .then( value => {
             io.sockets.emit('mensajes', value);
@@ -88,7 +88,7 @@ io.on('connection', async socket => {
     });
 
     // actualizacion de mensajes
-    let messages = sqlS.getAll();
+    let messages = normalize(mensajesApi.getAll(), posts);;
     messages.then( value => {
         io.sockets.emit('mensajes', value);
     })
