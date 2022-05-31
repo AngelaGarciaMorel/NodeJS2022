@@ -77,12 +77,16 @@ io.on('connection', async socket => {
         mensajesApi.save(message)
         .then(() => {
             console.log('--------------objeto normalizado--------')
-
+            const objParaNorm = {}
             objParaNorm.id = "Mensajes";
-            objParaNorm.mensajes = mensajesApi.getAll();
-            const obj = normalize(objParaNorm, posts);
-            console.log(obj)
-        return obj
+            mensajesApi.getAll()
+            .then(mes => {
+                objParaNorm.mensajes =mes;
+                const obj = normalize(objParaNorm, posts);
+                console.log(obj)
+                return obj
+            })
+
         })
         .then( value => {
             io.sockets.emit('mensajes', value);
@@ -93,12 +97,14 @@ io.on('connection', async socket => {
     });
 
     // actualizacion de mensajes
+    const objParaNorm = {}
     objParaNorm.id = "Mensajes";
-    objParaNorm.mensajes = mensajesApi.getAll();
-    const obj = normalize(objParaNorm, posts);
-    let messages = normalize(obj, posts);
-    messages.then( value => {
-        io.sockets.emit('mensajes', value);
+    mensajesApi.getAll()
+    .then(mes => {
+        objParaNorm.mensajes = mes;
+        const obj = normalize(objParaNorm, posts);
+        let messages = normalize(obj, posts);
+        io.sockets.emit('mensajes', messages);
     })
     .catch((err) => {
         console.log(err); throw err;

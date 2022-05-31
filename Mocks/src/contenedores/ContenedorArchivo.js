@@ -1,4 +1,4 @@
-
+import  fs from 'fs';
 class ContenedorArchivo {
     constructor(nombreArchivo){
         this.nombreArchivo = nombreArchivo;
@@ -7,7 +7,7 @@ class ContenedorArchivo {
     async save(objeto){
         try {
             //generador id
-            const fs = require('fs');
+            //const fs = require('fs');
             let id = 0;
             let info = [];
             const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
@@ -35,7 +35,7 @@ class ContenedorArchivo {
     }
     async getById(idObjeto) {
         try {
-            const fs = require('fs');
+            //const fs = require('fs');
             const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
 
             if(contenido.length > 0){
@@ -57,7 +57,7 @@ class ContenedorArchivo {
 
     async getAll() {
         try {
-            const fs = require('fs');
+
             const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
             if(contenido.length > 0){
                 const info = JSON.parse(contenido);
@@ -71,7 +71,7 @@ class ContenedorArchivo {
 
     async deleteById(idObjeto){
         try {
-            const fs = require('fs');
+            //const fs = require('fs');
             const contenido = await fs.promises.readFile(this.nombreArchivo,'utf-8');
             if(contenido.length > 0){
                 let info = JSON.parse(contenido);
@@ -94,7 +94,7 @@ class ContenedorArchivo {
 
     async deleteAll(){
         try {
-            const fs = require('fs');
+            //const fs = require('fs');
             await fs.promises.writeFile(this.nombreArchivo,'');
         } catch (error) {
             console.log (error) ;  
