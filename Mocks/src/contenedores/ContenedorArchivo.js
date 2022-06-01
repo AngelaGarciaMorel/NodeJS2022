@@ -23,6 +23,8 @@ class ContenedorArchivo {
              }
 
             objeto.id = ++id;
+
+
             info.push(objeto);
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(info,null,2));
             return id;

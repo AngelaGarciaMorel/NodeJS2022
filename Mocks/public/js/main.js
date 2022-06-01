@@ -1,5 +1,7 @@
 const socket = io.connect();
-
+const normalize = normalizr.normalize;
+const denormalize = normalizr.denormalize;
+const schema = normalizr.schema
 //------------------------------------------------------------------------------------
 
 const formAgregarProducto = document.getElementById('formAgregarProducto')
@@ -35,13 +37,18 @@ function makeHtmlTable(productos) {
 // MENSAJES
 
 /* --------------------- DESNORMALIZACIÓN DE MENSAJES ---------------------------- */
-// Definimos un esquema de autor
 
+// Definimos un esquema de autor
+const authorSchema = new schema.Entity('author')
 
 // Definimos un esquema de mensaje
-
+const messageSchema = new schema.Entity('message')
 
 // Definimos un esquema de posts
+const postsSchema = new schema.Entity('posts', {
+    author: authorSchema,
+    messages: [messageSchema]
+})
 
 /* ----------------------------------------------------------------------------- */
 
@@ -64,7 +71,7 @@ formPublicarMensaje.addEventListener('submit', e => {
         },
         text: inputMensaje.value
     }
-
+    console.log('mensaje: ' + JSON.stringify(mensaje))
     socket.emit('nuevoMensaje', mensaje);
     formPublicarMensaje.reset()
     inputMensaje.focus()
@@ -72,15 +79,17 @@ formPublicarMensaje.addEventListener('submit', e => {
 
 socket.on('mensajes', mensajesN => {
 
-    console.log(`Porcentaje de compresión ${porcentajeC}%`)
-    document.getElementById('compresion-info').innerText = porcentajeC
+    //console.log(`Porcentaje de compresión ${porcentajeC}%`)
+    //document.getElementById('compresion-info').innerText = porcentajeC
 
-    console.log(mensajesD.mensajes);
-    const html = makeHtmlList(mensajesD.mensajes)
+    console.log('mensajes:'+mensajesN.mensajes);
+    const denormalizeData = denormalize(mensajesN.result, messageSchema,mensajesN.entities);
+    const html = makeHtmlList(denormalizeData)
     document.getElementById('mensajes').innerHTML = html;
 })
 
 function makeHtmlList(mensajes) {
+    console.log(mensajes)
     return mensajes.map(mensaje => {
         return (`
         <div>

@@ -28,53 +28,33 @@ const schema = normalizr.schema
 
 
 // Definimos un esquema de autor
-const author = new schema.Entity('author')
+const authorSchema = new schema.Entity('author', {}, {idAttribute:'email'})
 
 // Definimos un esquema de mensaje
-const message = new schema.Entity('message')
+const messageSchema = new schema.Entity('message')
 
 // Definimos un esquema de posts
-const posts = new schema.Entity('posts', {
-    author: author,
-    messages: [message]
+const postsSchema = new schema.Entity('posts', {
+    author: authorSchema,
+    messages: [messageSchema]
 })
 
-console.log('--------------objeto normalizado--------')
+// print
+import util from 'util';
 
-
+function print(objeto) {
+console.log(util.inspect(objeto,false,12,true));
+}
 //--------------------------------------------
 // configuro el socket
 
 io.on('connection', async socket => {
     console.log('Nuevo cliente conectado!');
 
-    // // carga inicial de productos
-    // socket.on('new-product', product => {
-    //     sqlP.insert(product)
-    //     .then(() => {
-    //     return sqlP.getAll();
-    //     })
-    //     .then( value => {
-    //         io.sockets.emit('productos', value);
-    //     })
-    //     .catch((err) => {
-    //         console.log(err); throw err;
-    //     })
-    // });   
-
-    // // actualizacion de productos
-    // let products = sqlP.getAll();
-    // products.then( value => {
-    //     io.sockets.emit('productos', value);
-    // })
-    // .catch((err) => {
-    //     console.log(err); throw err;
-    // })   
-
     // carga inicial de mensajes
 
-    socket.on('nuevoMensaje', message => {
-        mensajesApi.save(message)
+    socket.on('nuevoMensaje', mensaje => {        
+        mensajesApi.save(mensaje)
         .then(() => {
             console.log('--------------objeto normalizado--------')
             const objParaNorm = {}
@@ -82,8 +62,8 @@ io.on('connection', async socket => {
             mensajesApi.getAll()
             .then(mes => {
                 objParaNorm.mensajes =mes;
-                const obj = normalize(objParaNorm, posts);
-                console.log(obj)
+                const obj = normalize(objParaNorm, postsSchema);
+                print(obj)
                 return obj
             })
 
@@ -102,8 +82,9 @@ io.on('connection', async socket => {
     mensajesApi.getAll()
     .then(mes => {
         objParaNorm.mensajes = mes;
-        const obj = normalize(objParaNorm, posts);
-        let messages = normalize(obj, posts);
+        const obj = normalize(objParaNorm, postsSchema);
+        let messages = normalize(obj, postsSchema);
+        print(messages)
         io.sockets.emit('mensajes', messages);
     })
     .catch((err) => {
@@ -112,9 +93,9 @@ io.on('connection', async socket => {
         
 });
 
-async function listarMensajesNormalizados() {
+// async function listarMensajesNormalizados() {
     
-}
+// }
 
 //--------------------------------------------
 // agrego middlewares
