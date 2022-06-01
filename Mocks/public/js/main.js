@@ -93,8 +93,7 @@ function makeHtmlList(mensajes) {
     return mensajes.map(mensaje => {
         return (`
         <div>
-            <b style="color:blue;">${mensaje.author.email}</b>
-            [<span style="color:brown;">${mensaje.fyh}</span>] :
+            <b style="color:blue;">${mensaje.author.email}</b>:
             <i style="color:green;">${mensaje.text}</i>
             <img width="50" src="${mensaje.author.avatar}" alt=" ">
         </div>
