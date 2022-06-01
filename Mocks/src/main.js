@@ -31,11 +31,11 @@ const schema = normalizr.schema
 const authorSchema = new schema.Entity('author', {}, {idAttribute:'email'})
 
 // Definimos un esquema de mensaje
-const messageSchema = new schema.Entity('message')
+const messageSchema = new schema.Entity('message',{author: authorSchema})
 
 // Definimos un esquema de posts
 const postsSchema = new schema.Entity('posts', {
-    author: authorSchema,
+    //author: authorSchema,
     messages: [messageSchema]
 })
 
@@ -82,8 +82,8 @@ io.on('connection', async socket => {
     mensajesApi.getAll()
     .then(mes => {
         objParaNorm.mensajes = mes;
-        const obj = normalize(objParaNorm, postsSchema);
-        let messages = normalize(obj, postsSchema);
+        //const obj = normalize(mes, postsSchema);
+        let messages = normalize(objParaNorm, postsSchema);
         print(messages)
         io.sockets.emit('mensajes', messages);
     })

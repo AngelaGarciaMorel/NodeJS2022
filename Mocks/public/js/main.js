@@ -39,7 +39,7 @@ function makeHtmlTable(productos) {
 /* --------------------- DESNORMALIZACIÓN DE MENSAJES ---------------------------- */
 
 // Definimos un esquema de autor
-const authorSchema = new schema.Entity('author')
+const authorSchema = new schema.Entity('author', {}, {idAttribute:'email'})
 
 // Definimos un esquema de mensaje
 const messageSchema = new schema.Entity('message')
@@ -71,7 +71,7 @@ formPublicarMensaje.addEventListener('submit', e => {
         },
         text: inputMensaje.value
     }
-    console.log('mensaje: ' + JSON.stringify(mensaje))
+    
     socket.emit('nuevoMensaje', mensaje);
     formPublicarMensaje.reset()
     inputMensaje.focus()
@@ -82,9 +82,9 @@ socket.on('mensajes', mensajesN => {
     //console.log(`Porcentaje de compresión ${porcentajeC}%`)
     //document.getElementById('compresion-info').innerText = porcentajeC
 
-    console.log('mensajes:'+mensajesN.mensajes);
-    const denormalizeData = denormalize(mensajesN.result, messageSchema,mensajesN.entities);
-    const html = makeHtmlList(denormalizeData)
+    const denormalizeData = denormalize(mensajesN.result, postsSchema ,mensajesN.entities);
+    console.log('desnor:'+ JSON.stringify(denormalizeData.mensajes));
+    const html = makeHtmlList(denormalizeData.mensajes)
     document.getElementById('mensajes').innerHTML = html;
 })
 
