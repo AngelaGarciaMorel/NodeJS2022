@@ -1,4 +1,7 @@
 export default {
+    mongoAtlas: {
+        URL: 'mongodb+srv://angie:Angie1989@cluster0.u2jio.mongodb.net/ecommerce?retryWrites=true&w=majority'
+    },
     sqlite3: {
         client: 'sqlite3',
         connection: {
