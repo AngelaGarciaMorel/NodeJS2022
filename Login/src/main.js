@@ -51,8 +51,10 @@ app.use(session({
     cookie: {
         // Session expires after 10 min of inactivity.
         expires: 600000
+
     }
 }));
+
 
 //--------------------------------------------
 // rutas del servidor API REST
@@ -65,9 +67,16 @@ app.get('/', (req,res) => {
     res.sendFile('login.html', { root: path.join(__dirname, '../public') });
 
 })
+app.get('/login', (req,res) => {
+    if(!req.session.user){
+        res.sendFile('login.html', { root: path.join(__dirname, '../public') });
+    }else {
+        res.render('home',{nombre: req.session.user});  
+    }
+    
+})
 app.post('/login', (req,res) => {
     req.session.user = req.body.nombre;
-    console.log(req.session)
     res.render('home',{nombre: req.session.user});  
 })
 
