@@ -147,7 +147,6 @@
 import express from 'express'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
-
 import config from './config.js'
 
 import { Server as HttpServer } from 'http'
@@ -176,24 +175,54 @@ io.on('connection', async socket => {
 
 //--------------------------------------------
 // configuro el servidor
-
+import path from 'path';
+const __dirname = path.resolve();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, '../public')));
+
+
 
 app.set('view engine', 'ejs');
+app.set('views',path.join(__dirname, '../public/pages'));
 
 app.use(session({
-
-}))
+    secret:'secreto',
+    resave:false,
+    saveUninitialized:false,
+    cookie: {
+        // Session expires after 1 min of inactivity.
+        expires: 60000
+    }
+}));
 
 //--------------------------------------------
 // rutas del servidor API REST
 
-
 //--------------------------------------------
 // rutas del servidor web
 
+app.get('/', (req,res) => {
+    console.log(__dirname)
+    res.sendFile('login.html', { root: path.join(__dirname, '../public') });
+
+})
+app.post('/login', (req,res) => {
+    req.session.user = req.body.nombre;
+    console.log(req.session)
+    res.render('home',{nombre: req.session.user});  
+})
+
+app.get('/logout', (req,res) => {
+    const nombre = req.session.user;
+    req.session.destroy(err => {
+        if(err) {
+            res.json({ status: 'Log out error', body: err })
+        } else {
+            res.render('logout',{nombre: nombre});  
+        }
+     })
+})
 
 //--------------------------------------------
 // inicio el servidor

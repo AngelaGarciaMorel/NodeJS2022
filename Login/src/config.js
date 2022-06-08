@@ -17,5 +17,6 @@ export default {
     },
     fileSystem: {
         path: './DB'
-    }
+    },
+    PORT: 8080
 }
