@@ -1,4 +1,5 @@
 import express from 'express'
+import engine  from 'express-handlebars'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import config from './config.js'
@@ -37,7 +38,10 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
+// app.engine('.hbs',exphbs({ extname: '.hbs', defaultLayout: 'main.hbs' }))
+app.engine('.hbs', engine.engine({ extname: '.hbs', defaultLayout: 'main.hbs' }));
+app.set('view engine','.hbs')
 app.set('views',path.join(__dirname, '../public/pages'));
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 app.use(session({
@@ -62,18 +66,51 @@ app.use(session({
 //--------------------------------------------
 // rutas del servidor web
 
-app.get('/', (req,res) => {
-    console.log(__dirname)
-    res.sendFile('login.html', { root: path.join(__dirname, '../public') });
+// app.get('/', (req,res) => {
+//     console.log(__dirname)
+//     res.sendFile('login.html', { root: path.join(__dirname, '../public') });
 
-})
-app.get('/login', (req,res) => {
-    if(!req.session.user){
-        res.sendFile('login.html', { root: path.join(__dirname, '../public') });
-    }else {
-        res.render('home',{nombre: req.session.user});  
-    }
+// })
+// app.get('/login', (req,res) => {
+//     if(!req.session.user){
+//         res.sendFile('login.html', { root: path.join(__dirname, '../public') });
+//     }else {
+//         res.render('home',{nombre: req.session.user});  
+//     }
     
+// })
+//Registro
+app.get('/register', (req,res) => {
+    res.sendFile('register.html', { root: path.join(__dirname, '../public/views/') });
+})
+
+app.post('/register', (req,res) => {
+    const { nombre, password, direccion } = req.body;
+    const usuario = usuarios.find(usuarui => usuarui.nombre === nombre)
+    if(usuario) {
+        return res.render('register-error')
+    }
+
+    usuario.push({nombre, password, direccion})
+
+    res.redirect('/login')
+})
+
+//LOGIN
+app.get('/login', (req,res) => {
+    res.sendFile('login.html', { root: path.join(__dirname, '../public/views/') });
+})
+
+app.post('/login', (req,res) => {
+    const { nombre, password} = req.body
+    const usuario = usuarios.find(usuario => usuario.nombre === nombre && usuario.password === password)
+    if(!usuario) {
+        return res.render('login-error')
+    }
+    req.session.nombre = nombre
+    req.session.contador = 0
+
+    res.redirect('/datos')
 })
 app.post('/login', (req,res) => {
     req.session.user = req.body.nombre;
