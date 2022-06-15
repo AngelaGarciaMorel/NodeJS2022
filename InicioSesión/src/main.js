@@ -2,13 +2,16 @@ import express from 'express'
 import engine  from 'express-handlebars'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import bcrypt  from 'bcrypt'
+import passport from 'passport'
+import LocalStrategy from 'passport-local'
 import config from './config.js'
 
 import { Server as HttpServer } from 'http'
 import { Server as Socket } from 'socket.io'
 
-import authWebRouter from './routers/web/auth.js'
-import homeWebRouter from './routers/web/home.js'
+// import authWebRouter from './routers/web/auth.js'
+// import homeWebRouter from './routers/web/home.js'
 import productosApiRouter from './routers/api/productos.js'
 
 import addProductosHandlers from './routers/ws/productos.js'
@@ -36,14 +39,84 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, '../public')));
 
+//--------------------------------------------
+// configuro del passport
+import * as routes from './routes.js';
+import * as controllersdb from './controllersdb.js';
+import { User } from './models.js';
 
+passport.use('login', new LocalStrategy(
+    (username, password, done) => {
+        console.log('username: '+username)
+        User.findOne({ username }, (err, user) => {
+            if (err)
+                return done(err);
+            if (!user) {
+                console.log('User not found ' + username);
+                return done(null, false);
+            }
+            if (!isValidPassword(user, password)) {
+                return done(null, false);
+            }
 
-// app.set('view engine', 'ejs');
-// app.engine('.hbs',exphbs({ extname: '.hbs', defaultLayout: 'main.hbs' }))
+            return done(null, user);
+        });
+    }
+));
+
+passport.use('register', new LocalStrategy({
+    passReqToCallback: true
+}, (req, username, password, done) => {
+    User.findOne({ 'username': username }, (err, user) => {
+        if (err) {
+            return done(err);
+        }
+        if (user) {
+            return done(null, false);
+        }
+
+        const newUser = {
+            username: username,
+            password: createHash(password),
+            email: req.body.email,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        }
+
+        User.create(newUser, (err, userWithId) => {
+            if (err) {
+                return done(err);
+            }
+            return done(null, userWithId);
+        })
+    })
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+})
+
+passport.deserializeUser((id, done) => {
+    User.findById(id, done);
+});
+
+function isValidPassword(user, password) {
+    return bcrypt.compareSync(password, user.password);
+}
+
+function createHash(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
+}
+
+//--------------------------------------------
+//configuración vistas
+
 app.engine('.hbs', engine.engine({ extname: '.hbs', defaultLayout: 'main.hbs' }));
 app.set('view engine','.hbs')
-app.set('views',path.join(__dirname, '../public/pages'));
+app.set('views',path.join(__dirname, '../public/views'));
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+//--------------------------------------------
+
 app.use(session({
     store: MongoStore.create({
         mongoUrl: config.mongoAtlas.URL,
@@ -59,79 +132,38 @@ app.use(session({
     }
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
 
-//--------------------------------------------
-// rutas del servidor API REST
-
-//--------------------------------------------
-// rutas del servidor web
-
-// app.get('/', (req,res) => {
-//     console.log(__dirname)
-//     res.sendFile('login.html', { root: path.join(__dirname, '../public') });
-
-// })
-// app.get('/login', (req,res) => {
-//     if(!req.session.user){
-//         res.sendFile('login.html', { root: path.join(__dirname, '../public') });
-//     }else {
-//         res.render('home',{nombre: req.session.user});  
-//     }
-    
-// })
-//Registro
-app.get('/register', (req,res) => {
-    res.sendFile('register.html', { root: path.join(__dirname, '../public/views/') });
-})
-
-app.post('/register', (req,res) => {
-    const { nombre, password, direccion } = req.body;
-    const usuario = usuarios.find(usuarui => usuarui.nombre === nombre)
-    if(usuario) {
-        return res.render('register-error')
-    }
-
-    usuario.push({nombre, password, direccion})
-
-    res.redirect('/login')
-})
+app.get('/', routes.getRoot);
 
 //LOGIN
-app.get('/login', (req,res) => {
-    res.sendFile('login.html', { root: path.join(__dirname, '../public/views/') });
-})
+app.get('/login', routes.getLogin);
+app.post('/login', passport.authenticate('login', {failureRedirect: '/faillogin'}), routes.postLogin)
+app.get('/faillogin', routes.getFailLogin);
 
-app.post('/login', (req,res) => {
-    const { nombre, password} = req.body
-    const usuario = usuarios.find(usuario => usuario.nombre === nombre && usuario.password === password)
-    if(!usuario) {
-        return res.render('login-error')
+//REGISTER
+app.get('/register', routes.getSignup);
+app.post('/register', passport.authenticate('register', {failureRedirect: '/failsignup'}), routes.postSignup)
+app.get('/failsignup', routes.getFailsignup);
+
+function checkAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/login');
     }
-    req.session.nombre = nombre
-    req.session.contador = 0
+}
 
-    res.redirect('/datos')
-})
-app.post('/login', (req,res) => {
-    req.session.user = req.body.nombre;
-    res.render('home',{nombre: req.session.user});  
-})
 
-app.get('/logout', (req,res) => {
-    const nombre = req.session.user;
-    req.session.destroy(err => {
-        if(err) {
-            res.json({ status: 'Log out error', body: err })
-        } else {
-            res.render('logout',{nombre: nombre});  
-        }
-     })
-})
+app.get('/logout', routes.getLogout);
 
-//--------------------------------------------
-// inicio el servidor
+controllersdb.conectarDB(config.mongoAtlas.URL, err => {
+    if (err) return console.log('error bdd')
+    console.log('Base de datos conectada');
 
-const connectedServer = httpServer.listen(config.PORT, () => {
-    console.log(`Servidor http escuchando en el puerto ${connectedServer.address().port}`)
+    app.listen(config.PORT, (err) => {
+        if (err) return console.log('error en listen server');
+        console.log('Server running');
+    })
 })
-connectedServer.on('error', error => console.log(`Error en servidor ${error}`))

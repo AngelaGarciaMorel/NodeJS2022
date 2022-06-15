@@ -21,5 +21,6 @@ export default {
     fileSystem: {
         path: './DB'
     },
-    PORT: 8080
+    PORT: 8080,
+    TIEMPO_EXPIRACION:60000
 }
