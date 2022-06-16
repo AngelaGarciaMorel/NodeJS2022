@@ -1,6 +1,7 @@
 import express from 'express'
 import engine  from 'express-handlebars'
 import session from 'express-session'
+import normalizr from 'normalizr';
 import MongoStore from 'connect-mongo'
 import bcrypt  from 'bcrypt'
 import passport from 'passport'
@@ -10,12 +11,15 @@ import config from './config.js'
 import { Server as HttpServer } from 'http'
 import { Server as Socket } from 'socket.io'
 
-// import authWebRouter from './routers/web/auth.js'
-// import homeWebRouter from './routers/web/home.js'
-import productosApiRouter from './routers/api/productos.js'
+import ContenedorSQL from './contenedores/ContenedorSQL.js'
+import ContenedorArchivo from './contenedores/ContenedorArchivo.js'
 
-import addProductosHandlers from './routers/ws/productos.js'
-import addMensajesHandlers from './routers/ws/mensajes.js'
+// import authWebRouter from './routers/web/auth.js'
+
+//import productosApiRouter from './routers/api/productos.js'
+
+// import addProductosHandlers from './routers/ws/productos.js'
+// import addMensajesHandlers from './routers/ws/mensajes.js'
 
 //--------------------------------------------
 // instancio servidor, socket y api
@@ -24,11 +28,53 @@ const app = express()
 const httpServer = new HttpServer(app)
 const io = new Socket(httpServer)
 
+
+const productosApi = new ContenedorSQL(config.mariaDb, 'productos')
+const mensajesApi = new ContenedorArchivo(`${config.fileSystem.path}/mensajes.json`)
 //--------------------------------------------
 // configuro el socket
+const normalize = normalizr.normalize;
 
 io.on('connection', async socket => {
-    
+    console.log('Nuevo cliente conectado!');
+
+    // carga inicial de mensajes
+
+    socket.on('nuevoMensaje', mensaje => {        
+        mensajesApi.save(mensaje)
+        .then(() => {
+            const objParaNorm = {}
+            objParaNorm.id = "Mensajes";
+            mensajesApi.getAll()
+            .then(mes => {
+                objParaNorm.mensajes =mes;
+                const obj = normalize(objParaNorm, normalizarMensajes);
+                return obj
+            })
+
+        })
+        .then( value => {
+            io.sockets.emit('mensajes', value);
+        })
+        .catch((err) => {
+            console.log(err); throw err;
+        })
+    });
+
+    // actualizacion de mensajes
+    const objParaNorm = {}
+    objParaNorm.id = "Mensajes";
+    mensajesApi.getAll()
+    .then(mes => {
+        console.log('mes: '+mes)
+        objParaNorm.mensajes = mes;
+        let messages = normalize(objParaNorm, normalizarMensajes);
+        io.sockets.emit('mensajes', messages);
+    })
+    .catch((err) => {
+        console.log(err); throw err;
+    })
+        
 });
 
 //--------------------------------------------
