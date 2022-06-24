@@ -177,3 +177,17 @@ controllersdb.conectarDB(config.mongoAtlas.URL, err => {
         console.log('Server running');
     })
 })
+
+
+app.get('/info', (req,res) => {
+    let respuesta = {}
+    respuesta.Argumentos_Entrada = config.PORT + ", " + config.TIEMPOEXPIRACION
+    respuesta.SO = process.platform
+    respuesta.NodeVer = process.version
+    respuesta.TotMemoria = process.memoryUsage()
+    respuesta.Path = process.execPath
+    respuesta.pid = process.pid
+    respuesta.Dir = process.cwd()
+    console.log(respuesta)
+    res.json({respuesta});
+});
