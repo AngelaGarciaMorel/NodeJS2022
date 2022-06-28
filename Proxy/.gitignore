@@ -11,6 +11,6 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# package
-package.json
-package-lock.json
+.env
+
+
