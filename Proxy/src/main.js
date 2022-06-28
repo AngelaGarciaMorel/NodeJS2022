@@ -7,6 +7,8 @@ import bcrypt  from 'bcrypt'
 import passport from 'passport'
 import path from 'path';
 const __dirname = path.resolve();
+import os from 'os'
+import cluster from 'cluster';
 
 import config from './config.js'
 
@@ -87,15 +89,41 @@ app.use(passport.session());
 
 app.use(randomRouter)
 
-controllersdb.conectarDB(config.mongoAtlas.URL, err => {
-    if (err) return console.log('error bdd')
-    console.log('Base de datos conectada');
+if(config.EJECSERVER === 'FORK'){
+
+// controllersdb.conectarDB(config.mongoAtlas.URL, err => {
+//     if (err) return console.log('error bdd')
+//     console.log('Base de datos conectada');
 
     app.listen(config.PORT, (err) => {
         if (err) return console.log('error en listen server');
-        console.log('Server running');
+        console.log(`Server running PID ${process.pid}`);
     })
-})
-
+// })
+} else {
+    const numCpu = os.cpus().length
+    if(cluster.isPrimary) {
+        console.log(numCpu);
+        console.log(`PID MASTER ${process.pid}`);
+    
+        for(let i=0; i< numCpu; i++) {
+            cluster.fork()
+        }
+    
+        cluster.on('exit', worker => {
+           console.log(`Worker ${worker.process.pid} died`);
+           cluster.fork();
+        });
+    } else {
+        // controllersdb.conectarDB(config.mongoAtlas.URL, err => {
+        //     if (err) return console.log('error bdd')
+        //     console.log('Base de datos conectada');
+            app.listen(config.PORT, (err) => {
+                if (err) return console.log('error en listen server');
+                console.log(`Server running PID ${process.pid}`);
+            })
+        // })
+    }
+}
 
 

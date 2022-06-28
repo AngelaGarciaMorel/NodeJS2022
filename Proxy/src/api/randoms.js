@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { fork } from 'child_process'
 import path from 'path';
 const __dirname = path.resolve();
+import os from 'os'
+import config from '../config.js'
 
 const forked = fork('./api/child.js')
 
@@ -16,7 +18,7 @@ randomRouter.get('/info', (req,res) => {
     respuesta.Path = process.execPath
     respuesta.pid = process.pid
     respuesta.Dir = process.cwd()
-    console.log(respuesta)
+    respuesta.NroProc = os.cpus().length
     res.json({respuesta});
 });
 
@@ -51,8 +53,8 @@ randomRouter.get('/api/randoms', (req,res) => {
     res.json(calculaRandom(numPosibilidades))
 });
 
-setTimeout(() => {
-    forked.send({mensaje: 'Hola'})
-})
+// setTimeout(() => {
+//     forked.send({mensaje: 'Hola'})
+// })
 
 export default randomRouter

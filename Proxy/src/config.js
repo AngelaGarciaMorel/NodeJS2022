@@ -23,5 +23,6 @@ export default {
         path: './DB'
     },
     PORT: process.env.PORT || 8080,
-    TIEMPOEXPIRACION: process.env.TIEMPOEXPIRACION
+    TIEMPOEXPIRACION: process.env.TIEMPOEXPIRACION,
+    EJECSERVER: process.env.EJECSERVER || FORK
 }
