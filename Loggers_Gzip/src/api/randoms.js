@@ -5,7 +5,7 @@ const __dirname = path.resolve();
 import os from 'os'
 import config from '../config.js'
 import compression from 'compression';
-import loggerDefault from '../loggers/log4js.js';
+import { loggerDefault } from '../loggers/log4js.js';
 
 const forked = fork('./api/child.js')
 
